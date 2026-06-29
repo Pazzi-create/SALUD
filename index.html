@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Salud Raúl & Montse</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=Syne:wght@400;700;800&family=Syne+Mono&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --raul: #4ade9b; --raul-dim: #1a3d2b;
+    --montse: #f472b6; --montse-dim: #3d1a2b;
+    --bg: #0c0f0e; --surface: #131816; --surface2: #1a1f1c;
+    --border: #252c28; --text: #e8ede9; --text-dim: #6b7c72; --text-mid: #9ab0a2;
+    --warn: #f59e0b; --danger: #ef4444; --ok: #4ade80;
+    --orange: #ff8c42; --purple: #c084fc;
+    --radius: 16px; --radius-sm: 8px;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--bg); color:var(--text); font-family:'DM Sans',sans-serif; min-height:100vh; padding-bottom:60px; }
+
+  .hero { background:linear-gradient(135deg,#0c1a12 0%,#0c0f1a 50%,#1a0c12 100%); padding:48px 24px 36px; text-align:center; border-bottom:1px solid var(--border); position:relative; overflow:hidden; }
+  .hero::before { content:''; position:absolute; inset:0; background:radial-gradient(ellipse 60% 60% at 30% 50%, rgba(74,222,155,0.07) 0%, transparent 70%), radial-gradient(ellipse 60% 60% at 70% 50%, rgba(244,114,182,0.07) 0%, transparent 70%); }
+  .hero-tag { font-size:11px; letter-spacing:3px; text-transform:uppercase; color:var(--text-dim); margin-bottom:12px; position:relative; }
+  .hero h1 { font-family:'DM Serif Display',serif; font-size:clamp(28px,6vw,48px); font-weight:400; line-height:1.1; position:relative; }
+  .hero h1 span.g { color:var(--raul); } .hero h1 span.p { color:var(--montse); }
+  .hero-sub { margin-top:10px; font-size:13px; color:var(--text-dim); position:relative; }
+  .badge-glp { display:inline-flex; align-items:center; gap:6px; margin-top:16px; padding:6px 14px; border-radius:100px; font-size:12px; font-weight:500; background:rgba(74,222,155,0.12); border:1px solid rgba(74,222,155,0.25); color:#a7f3d0; }
+  .badge-glp::before { content:'▶'; font-size:10px; }
+
+  .nav { display:flex; gap:4px; padding:16px 16px 0; overflow-x:auto; scrollbar-width:none; border-bottom:1px solid var(--border); background:var(--surface); position:sticky; top:0; z-index:100; }
+  .nav::-webkit-scrollbar { display:none; }
+  .nav-btn { flex-shrink:0; padding:10px 18px; border:none; background:transparent; color:var(--text-dim); font-family:'DM Sans',sans-serif; font-size:13px; font-weight:500; cursor:pointer; border-radius:var(--radius-sm) var(--radius-sm) 0 0; transition:all .2s; white-space:nowrap; border-bottom:2px solid transparent; margin-bottom:-1px; }
+  .nav-btn:hover { color:var(--text); }
+  .nav-btn.active { color:var(--text); border-bottom-color:var(--raul); background:rgba(74,222,155,0.05); }
+
+  .container { max-width:900px; margin:0 auto; padding:24px 16px; }
+  .section { display:none; } .section.active { display:block; animation:fadeIn .3s ease; }
+  @keyframes fadeIn { from{opacity:0;transform:translateY(8px);} to{opacity:1;transform:translateY(0);} }
+
+  .card { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:24px; margin-bottom:16px; }
+  .card-title { font-family:'DM Serif Display',serif; font-size:20px; font-weight:400; margin-bottom:20px; display:flex; align-items:center; gap:10px; }
+
+  .grid2 { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  @media (max-width:600px) { .grid2 { grid-template-columns:1fr; } }
+
+  .stat-hero { background:var(--surface2); border-radius:var(--radius); padding:20px; text-align:center; }
+  .stat-hero.raul { border-top:3px solid var(--raul); } .stat-hero.montse { border-top:3px solid var(--montse); }
+  .stat-name { font-size:11px; letter-spacing:2px; text-transform:uppercase; margin-bottom:6px; }
+  .stat-name.raul { color:var(--raul); } .stat-name.montse { color:var(--montse); }
+  .stat-kg { font-family:'DM Serif Display',serif; font-size:42px; line-height:1; }
+  .stat-delta { margin-top:4px; font-size:13px; font-weight:500; }
+  .stat-delta.pos { color:var(--ok); } .stat-delta.warn { color:var(--warn); }
+  .stat-sub { font-size:12px; color:var(--text-dim); margin-top:8px; }
+
+  .prog-table { width:100%; border-collapse:collapse; font-size:13px; }
+  .prog-table th { text-align:left; padding:8px 10px; font-size:11px; font-weight:500; letter-spacing:1px; text-transform:uppercase; color:var(--text-dim); border-bottom:1px solid var(--border); }
+  .prog-table th.raul { color:var(--raul); } .prog-table th.montse { color:var(--montse); }
+  .prog-table td { padding:10px; border-bottom:1px solid rgba(255,255,255,0.04); color:var(--text-mid); }
+  .prog-table td:first-child { color:var(--text-dim); font-size:12px; }
+  .prog-table td.current { color:var(--text); font-weight:600; }
+  .prog-table tr.highlight td { background:rgba(74,222,155,0.03); }
+
+  .comp-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
+  @media (max-width:500px) { .comp-grid { grid-template-columns:repeat(2,1fr); } }
+  .comp-item { background:var(--surface2); border-radius:var(--radius-sm); padding:14px; text-align:center; }
+  .comp-label { font-size:10px; letter-spacing:1px; text-transform:uppercase; color:var(--text-dim); margin-bottom:4px; }
+  .comp-val { font-size:22px; font-weight:600; }
+  .comp-delta { font-size:11px; margin-top:2px; }
+  .comp-delta.good { color:var(--ok); } .comp-delta.warn { color:var(--warn); }
+
+  .timeline { position:relative; padding-left:24px; }
+  .timeline::before { content:''; position:absolute; left:7px; top:8px; bottom:8px; width:2px; background:var(--border); }
+  .tl-item { position:relative; margin-bottom:20px; }
+  .tl-dot { position:absolute; left:-20px; top:4px; width:10px; height:10px; border-radius:50%; border:2px solid var(--border); background:var(--bg); }
+  .tl-dot.done { background:var(--raul); border-color:var(--raul); }
+  .tl-dot.current { background:var(--warn); border-color:var(--warn); box-shadow:0 0 8px rgba(245,158,11,.5); }
+  .tl-dot.pause { background:var(--danger); border-color:var(--danger); }
+  .tl-date { font-size:11px; color:var(--text-dim); margin-bottom:2px; }
+  .tl-title { font-size:14px; font-weight:500; }
+  .tl-desc { font-size:12px; color:var(--text-dim); margin-top:2px; }
+
+  .chip { display:inline-flex; align-items:center; gap:4px; padding:3px 10px; border-radius:100px; font-size:11px; font-weight:500; }
+  .chip.ok { background:rgba(74,222,128,.1); color:var(--ok); }
+  .chip.warn { background:rgba(245,158,11,.1); color:var(--warn); }
+  .chip.bad { background:rgba(239,68,68,.1); color:var(--danger); }
+  .chip.info { background:rgba(99,179,237,.1); color:#90cdf4; }
+
+  .lab-table { width:100%; border-collapse:collapse; font-size:12px; }
+  .lab-table th { text-align:left; padding:8px 10px; font-size:10px; font-weight:600; letter-spacing:1px; text-transform:uppercase; color:var(--text-dim); border-bottom:1px solid var(--border); }
+  .lab-table td { padding:9px 10px; border-bottom:1px solid rgba(255,255,255,0.03); color:var(--text-mid); }
+  .lab-table td:first-child { color:var(--text); }
+
+  .highlight-box { background:linear-gradient(135deg, rgba(74,222,155,0.06), rgba(244,114,182,0.06)); border:1px solid rgba(74,222,155,0.15); border-radius:var(--radius); padding:20px; margin-bottom:16px; }
+  .highlight-box h3 { font-family:'DM Serif Display',serif; font-size:18px; font-weight:400; margin-bottom:12px; }
+
+  .footer { text-align:center; padding:24px; font-size:11px; color:var(--text-dim); border-top:1px solid var(--border); margin-top:40px; }
+
+  .dash-subnav { display:flex; gap:8px; margin-bottom:20px; }
+  .dash-subbtn { flex:1; padding:12px; border-radius:var(--radius-sm); border:1px solid var(--border); background:var(--surface2); color:var(--text-dim); font-family:'DM Sans',sans-serif; font-size:13px; font-weight:600; cursor:pointer; transition:all .2s; text-align:center; }
+  .dash-subbtn.raul.active { border-color:var(--raul); background:rgba(74,222,155,0.08); color:var(--raul); }
+  .dash-subbtn.montse.active { border-color:var(--montse); background:rgba(244,114,182,0.08); color:var(--montse); }
+  .dash-panel { display:none; } .dash-panel.active { display:block; animation:fadeIn .3s ease; }
+
+  .dboard-hero { border-radius:var(--radius); padding:20px; margin-bottom:16px; border-top:3px solid; }
+  .dboard-hero.raul { background:var(--surface2); border-color:var(--raul); }
+  .dboard-hero.montse { background:var(--surface2); border-color:var(--montse); }
+  .dboard-peso { font-family:'Syne',sans-serif; font-weight:800; font-size:clamp(40px,8vw,56px); line-height:1; }
+  .dboard-peso .u { font-size:.4em; font-weight:400; opacity:.55; vertical-align:super; }
+  .dboard-peso.raul { color:var(--raul); } .dboard-peso.montse { color:var(--montse); }
+  .dboard-mini-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-top:14px; }
+  @media (max-width:600px) { .dboard-mini-grid { grid-template-columns:repeat(2,1fr); } }
+  .dboard-mini { background:rgba(255,255,255,0.03); border-radius:var(--radius-sm); padding:10px 11px; }
+  .dboard-mini-lbl { font-size:9px; letter-spacing:1px; text-transform:uppercase; color:var(--text-dim); margin-bottom:3px; }
+  .dboard-mini-val { font-family:'Syne Mono',monospace; font-size:15px; font-weight:600; }
+  .dboard-mini-sub { font-size:9px; color:var(--text-dim); margin-top:2px; }
+
+  .chart-box { background:var(--surface2); border-radius:var(--radius-sm); padding:14px 14px 8px; margin-bottom:16px; }
+  .chart-title { font-size:11px; font-weight:600; letter-spacing:1px; text-transform:uppercase; color:var(--text-dim); margin-bottom:8px; }
+  canvas.dash-canvas { display:block; width:100% !important; }
+
+  .loading { text-align:center; padding:60px 20px; color:var(--text-dim); font-size:13px; }
+  .error-box { background:rgba(239,68,68,0.08); border:1px solid rgba(239,68,68,0.25); border-radius:var(--radius); padding:20px; color:#fca5a5; font-size:13px; line-height:1.6; }
+</style>
+</head>
+<body>
+
+<div id="app">
+  <div class="loading">Cargando datos…</div>
+</div>
+
+<script>
+/* ════════════════════════════════════════════════
+   ESTE ARCHIVO NUNCA SE REESCRIBE A MANO.
+   Todos los números viven en datos.json — el HTML
+   solo los lee y los dibuja. Para actualizar medidas,
+   se edita datos.json (una fila nueva), nunca este archivo.
+════════════════════════════════════════════════ */
+
+let DATA = null;
+
+async function loadData() {
+  try {
+    const res = await fetch('datos.json?_=' + Date.now()); // evita caché
+    if (!res.ok) throw new Error('No se pudo cargar datos.json (HTTP ' + res.status + ')');
+    DATA = await res.json();
+    render();
+  } catch (err) {
+    document.getElementById('app').innerHTML = `
+      <div class="container">
+        <div class="error-box">
+          <strong>No se pudieron cargar los datos.</strong><br>
+          ${err.message}<br><br>
+          Verifica que el archivo <code>datos.json</code> esté en la misma carpeta que este HTML y que el nombre sea exacto.
+        </div>
+      </div>`;
+  }
+}
+
+function fmt(v, d=1) { return (typeof v === 'number') ? v.toFixed(d) : '—'; }
+function delta(a, b, d=1) {
+  if (typeof a !== 'number' || typeof b !== 'number') return '—';
+  const diff = b - a;
+  const sign = diff > 0 ? '+' : '';
+  return sign + diff.toFixed(d);
+}
+
+function render() {
+  const r = DATA.raul, m = DATA.montse;
+  const rLast = r.historial[r.historial.length - 1];
+  const mLast = m.historial[m.historial.length - 1];
+  const rFirst = r.historial[0];
+  const mFirst = m.historial[0];
+
+  document.getElementById('app').innerHTML = `
+    <div class="hero">
+      <div class="hero-tag">Plan de Salud Personal</div>
+      <h1><span class="g">Raúl</span> <span style="color:var(--text-dim);font-size:0.7em">&</span> <span class="p">Montse</span></h1>
+      <div class="hero-sub">Tirzepatida GLP-1/GIP · Actualizado ${DATA.ultima_actualizacion}</div>
+      <div style="margin-top:12px;"><span class="badge-glp">Última medición: ${rLast.fecha}</span></div>
+    </div>
+
+    <nav class="nav">
+      <button class="nav-btn active" data-tab="resumen">📊 Resumen</button>
+      <button class="nav-btn" data-tab="dashboard">📈 Dashboard</button>
+      <button class="nav-btn" data-tab="progreso">📋 Progreso</button>
+      <button class="nav-btn" data-tab="labs">🧬 Labs</button>
+    </nav>
+
+    <div class="container">
+
+      <div id="tab-resumen" class="section active">
+        <div class="grid2">
+          <div class="stat-hero raul">
+            <div class="stat-name raul">🟢 RAÚL</div>
+            <div class="stat-kg">${fmt(rLast.peso_kg)} kg</div>
+            <div class="stat-delta pos">${delta(rFirst.peso_kg, rLast.peso_kg)} kg vs inicio</div>
+            <div class="stat-sub">${rFirst.fecha} → ${rLast.fecha}</div>
+          </div>
+          <div class="stat-hero montse">
+            <div class="stat-name montse">🩷 MONTSE</div>
+            <div class="stat-kg">${fmt(mLast.peso_kg)} kg</div>
+            <div class="stat-delta pos">${delta(mFirst.peso_kg, mLast.peso_kg)} kg vs inicio</div>
+            <div class="stat-sub">${mFirst.fecha} → ${mLast.fecha}</div>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top:16px;">
+          <div class="card-title"><span style="color:var(--raul)">🟢</span> Composición · Raúl · ${rLast.fecha}</div>
+          <div class="comp-grid">
+            ${compItem('Grasa %', rLast.grasa_pct, delta(rFirst.grasa_pct, rLast.grasa_pct), '%')}
+            ${compItem('Músculo %', rLast.musculo_pct, delta(rFirst.musculo_pct, rLast.musculo_pct), '%')}
+            ${compItem('Visceral', rLast.grasa_visceral, delta(rFirst.grasa_visceral, rLast.grasa_visceral), '', 0)}
+            ${compItem('Abdomen', rLast.abdomen_cm, delta(rFirst.abdomen_cm, rLast.abdomen_cm), ' cm')}
+            ${compItem('Cintura', rLast.cintura_cm, delta(rFirst.cintura_cm, rLast.cintura_cm), ' cm')}
+            ${compItem('Cadera', rLast.cadera_cm, delta(rFirst.cadera_cm, rLast.cadera_cm), ' cm')}
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title"><span style="color:var(--montse)">🩷</span> Composición · Montse · ${mLast.fecha}</div>
+          <div class="comp-grid">
+            ${compItem('Grasa %', mLast.grasa_pct, delta(mFirst.grasa_pct, mLast.grasa_pct), '%')}
+            ${compItem('Músculo %', mLast.musculo_pct, delta(mFirst.musculo_pct, mLast.musculo_pct), '%')}
+            ${compItem('Visceral', mLast.grasa_visceral, delta(mFirst.grasa_visceral, mLast.grasa_visceral), '', 0)}
+            ${compItem('Abdomen', mLast.abdomen_cm, delta(mFirst.abdomen_cm, mLast.abdomen_cm), ' cm')}
+            ${compItem('Cintura', mLast.cintura_cm, delta(mFirst.cintura_cm, mLast.cintura_cm), ' cm')}
+            ${compItem('Cadera', mLast.cadera_cm, delta(mFirst.cadera_cm, mLast.cadera_cm), ' cm')}
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">📅 Línea de tiempo GLP-1</div>
+          <div class="timeline">
+            ${DATA.linea_tiempo_glp1.map((e,i) => `
+              <div class="tl-item">
+                <div class="tl-dot ${i === DATA.linea_tiempo_glp1.length-1 ? 'current' : (e.evento.includes('NO') ? 'pause' : 'done')}"></div>
+                <div class="tl-date">${e.fecha}</div>
+                <div class="tl-title">${e.evento}</div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+
+        ${DATA.pendientes && DATA.pendientes.length ? `
+        <div class="card">
+          <div class="card-title">📌 Pendientes</div>
+          <ul style="list-style:none;font-size:13px;color:var(--text-mid);line-height:1.8;">
+            ${DATA.pendientes.map(p => `<li style="padding:6px 0;border-bottom:1px solid var(--border);">□ ${p}</li>`).join('')}
+          </ul>
+        </div>` : ''}
+      </div>
+
+      <div id="tab-dashboard" class="section">
+        <div class="dash-subnav">
+          <button class="dash-subbtn raul active" data-dash="raul">🟢 Dashboard de Raúl</button>
+          <button class="dash-subbtn montse" data-dash="montse">🩷 Dashboard de Montse</button>
+        </div>
+        <div id="dash-raul" class="dash-panel active">${renderPersonDashboard('raul', r, rLast, rFirst)}</div>
+        <div id="dash-montse" class="dash-panel">${renderPersonDashboard('montse', m, mLast, mFirst)}</div>
+      </div>
+
+      <div id="tab-progreso" class="section">
+        <div class="card">
+          <div class="card-title"><span style="color:var(--raul)">🟢</span> Raúl · Historial Completo</div>
+          <div style="overflow-x:auto;">${renderProgressTable(r.historial, 'raul')}</div>
+        </div>
+        <div class="card">
+          <div class="card-title"><span style="color:var(--montse)">🩷</span> Montse · Historial Completo</div>
+          <div style="overflow-x:auto;">${renderProgressTable(m.historial, 'montse')}</div>
+        </div>
+      </div>
+
+      <div id="tab-labs" class="section">
+        ${renderLabsRaul(r.labs)}
+        ${renderLabsMontse(m.labs)}
+      </div>
+
+    </div>
+
+    <div class="footer">
+      Datos cargados en vivo desde datos.json · Última actualización: ${DATA.ultima_actualizacion}<br>
+      ⚕️ Documento de referencia personal — no sustituye supervisión médica.
+    </div>
+  `;
+
+  attachNavListeners();
+  drawAllCharts();
+}
+
+function compItem(label, val, deltaTxt, unit='', decimals=1) {
+  const isGood = deltaTxt.startsWith('-') ? true : (label.includes('Músculo') && deltaTxt.startsWith('+'));
+  return `
+    <div class="comp-item">
+      <div class="comp-label">${label}</div>
+      <div class="comp-val">${fmt(val, decimals)}${unit}</div>
+      <div class="comp-delta ${isGood ? 'good' : 'warn'}">${deltaTxt}${unit} vs inicio</div>
+    </div>`;
+}
+
+function renderProgressTable(hist, who) {
+  const color = who === 'raul' ? 'raul' : 'montse';
+  const rows = [
+    ['Peso (kg)', 'peso_kg', 1],
+    ['Grasa %', 'grasa_pct', 1],
+    ['Músculo %', 'musculo_pct', 1],
+    ['Grasa visceral', 'grasa_visceral', 0],
+    ['Abdomen (cm)', 'abdomen_cm', 1],
+    ['Cintura (cm)', 'cintura_cm', 1],
+    ['Cadera (cm)', 'cadera_cm', 1],
+    ['Muslo (cm)', 'muslo_cm', 1],
+    ['Brazo (cm)', 'brazo_cm', 1],
+  ];
+  const first = hist[0], last = hist[hist.length-1];
+  let html = `<table class="prog-table"><thead><tr><th>Medida</th>`;
+  hist.forEach((h,i) => html += `<th class="${i===hist.length-1 ? color : ''}">${h.fecha}${i===hist.length-1?' ★':''}</th>`);
+  html += `<th>Δ Total</th></tr></thead><tbody>`;
+  rows.forEach(([label, key, dec]) => {
+    html += `<tr class="${key==='peso_kg'?'highlight':''}"><td>${label}</td>`;
+    hist.forEach((h,i) => html += `<td class="${i===hist.length-1?'current':''}">${fmt(h[key], dec)}</td>`);
+    html += `<td>${delta(first[key], last[key], dec)}</td></tr>`;
+  });
+  html += `</tbody></table>`;
+  return html;
+}
+
+function renderLabsRaul(labs) {
+  if (!labs) return '';
+  return `
+    <div class="card">
+      <div class="card-title"><span style="color:var(--raul)">🟢</span> Raúl · Labs ${labs.fecha}</div>
+      <table class="lab-table" style="margin-bottom:16px;">
+        <thead><tr><th>HOMA-IR</th><th>Valor</th><th>Ref</th><th>Estado</th></tr></thead>
+        <tbody><tr><td>Glucosa / Insulina / HOMA-IR</td><td>${labs.homa_ir.glucosa} / ${labs.homa_ir.insulina} / <strong>${labs.homa_ir.valor}</strong></td><td>${labs.homa_ir.ref}</td><td><span class="chip warn">${labs.homa_ir.estado}</span></td></tr></tbody>
+      </table>
+      <table class="lab-table" style="margin-bottom:16px;">
+        <thead><tr><th>Lípidos</th><th>Valor</th></tr></thead>
+        <tbody>
+          <tr><td>Colesterol total</td><td>${labs.lipidos.colesterol_total} mg/dL</td></tr>
+          <tr><td>LDL directo</td><td>${labs.lipidos.ldl} mg/dL</td></tr>
+          <tr><td><strong>sd LDL</strong></td><td><strong>${labs.lipidos.sd_ldl}</strong> (ref 0–1.35) <span class="chip bad">crítico</span></td></tr>
+          <tr><td>HDL</td><td>${labs.lipidos.hdl} mg/dL</td></tr>
+          <tr><td>Triglicéridos</td><td>${labs.lipidos.trigliceridos} mg/dL</td></tr>
+        </tbody>
+      </table>
+      <table class="lab-table">
+        <thead><tr><th>Hígado / Riñón / Otros</th><th>Valor</th></tr></thead>
+        <tbody>
+          <tr><td>GGT</td><td>${labs.higado_rinon.ggt} U/L <span class="chip bad">alto</span></td></tr>
+          <tr><td>Ácido úrico</td><td>${labs.higado_rinon.acido_urico} mg/dL <span class="chip bad">alto</span></td></tr>
+          <tr><td>TSH</td><td>${labs.tiroides.tsh} µUI/mL <span class="chip ok">normal</span></td></tr>
+          <tr><td>Basófilos</td><td>${labs.hematico.basofilos_pct}% <span class="chip bad">alto</span></td></tr>
+          <tr><td>pH urinario</td><td>${labs.orina.ph} (meta ${labs.orina.meta_ph})</td></tr>
+        </tbody>
+      </table>
+    </div>`;
+}
+
+function renderLabsMontse(labs) {
+  if (!labs) return '';
+  return `
+    <div class="card">
+      <div class="card-title"><span style="color:var(--montse)">🩷</span> Montse · Labs disponibles</div>
+      <table class="lab-table">
+        <thead><tr><th>Marcador</th><th>Resultado</th><th>Referencia</th><th>Estado</th></tr></thead>
+        <tbody>
+          <tr><td><strong>TSH</strong></td><td><strong>${labs.tsh.valor}</strong></td><td>${labs.tsh.ref}</td><td><span class="chip bad">${labs.tsh.estado}</span></td></tr>
+          <tr><td><strong>Glucosa</strong></td><td><strong>${labs.glucosa.valor}</strong></td><td>${labs.glucosa.ref}</td><td><span class="chip warn">${labs.glucosa.estado}</span></td></tr>
+          <tr><td><strong>HOMA-IR</strong></td><td><strong>${labs.homa_ir.valor}</strong></td><td>${labs.homa_ir.ref}</td><td><span class="chip bad">${labs.homa_ir.estado}</span></td></tr>
+        </tbody>
+      </table>
+    </div>`;
+}
+
+function renderPersonDashboard(who, person, last, first) {
+  const color = who === 'raul' ? 'raul' : 'montse';
+  const metaPeso = person.metas.peso_kg;
+  const extraCharts = who === 'raul'
+    ? `<div class="chart-box"><div class="chart-title">Grasa Visceral</div><canvas class="dash-canvas" id="${who}_cVisc" height="130"></canvas></div>`
+    : `<div class="chart-box"><div class="chart-title">Busto · Muslo · Brazo · cm</div><canvas class="dash-canvas" id="${who}_cOtras" height="160"></canvas></div>`;
+
+  return `
+    <div class="dboard-hero ${color}">
+      <div style="font-size:11px;color:var(--text-dim);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">Peso actual · ${last.fecha}</div>
+      <div class="dboard-peso ${color}">${fmt(last.peso_kg)}<span class="u">kg</span></div>
+      <div style="font-size:11px;color:var(--text-dim);margin-top:4px;">Inicio: ${fmt(first.peso_kg)} kg · ${first.fecha}</div>
+      <span class="chip ok" style="margin-top:10px;">${delta(first.peso_kg, last.peso_kg)} kg total</span>
+      <div class="dboard-mini-grid">
+        <div class="dboard-mini"><div class="dboard-mini-lbl">Grasa %</div><div class="dboard-mini-val" style="color:var(--ok)">${fmt(last.grasa_pct)}%</div><div class="dboard-mini-sub">inicio ${fmt(first.grasa_pct)}%</div></div>
+        <div class="dboard-mini"><div class="dboard-mini-lbl">Músculo %</div><div class="dboard-mini-val" style="color:var(--${color})">${fmt(last.musculo_pct)}%</div><div class="dboard-mini-sub">inicio ${fmt(first.musculo_pct)}%</div></div>
+        <div class="dboard-mini"><div class="dboard-mini-lbl">Visceral</div><div class="dboard-mini-val">${fmt(last.grasa_visceral,0)}</div><div class="dboard-mini-sub">inicio ${fmt(first.grasa_visceral,0)}</div></div>
+        <div class="dboard-mini"><div class="dboard-mini-lbl">Abdomen</div><div class="dboard-mini-val">${fmt(last.abdomen_cm)} cm</div><div class="dboard-mini-sub">inicio ${fmt(first.abdomen_cm)} cm</div></div>
+      </div>
+    </div>
+    <div class="chart-box"><div class="chart-title">Evolución del Peso · kg</div><canvas class="dash-canvas" id="${who}_cPeso" height="170"></canvas></div>
+    <div class="chart-box"><div class="chart-title">% Grasa vs % Músculo</div><canvas class="dash-canvas" id="${who}_cComp" height="160"></canvas></div>
+    <div class="chart-box"><div class="chart-title">Medidas Corporales · cm</div><canvas class="dash-canvas" id="${who}_cMedidas" height="160"></canvas></div>
+    ${extraCharts}
+  `;
+}
+
+/* ── NAVEGACIÓN ── */
+function attachNavListeners() {
+  document.querySelectorAll('.nav-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+      document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+      btn.classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  });
+  document.querySelectorAll('.dash-subbtn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.dash-panel').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.dash-subbtn').forEach(b => b.classList.remove('active'));
+      document.getElementById('dash-' + btn.dataset.dash).classList.add('active');
+      btn.classList.add('active');
+    });
+  });
+}
+
+/* ── CANVAS CHARTS (genéricos, alimentados por DATA) ── */
+const GRD = 'rgba(255,255,255,.05)', TXT = 'rgba(255,255,255,.3)';
+const L=32, R=26, T=14, B=22;
+
+function setupCanvas(id) {
+  const el = document.getElementById(id);
+  if (!el) return null;
+  const w = el.parentElement.clientWidth - 24;
+  const h = parseInt(el.getAttribute('height')) || 150;
+  el.width = w * devicePixelRatio; el.height = h * devicePixelRatio;
+  el.style.width = w + 'px'; el.style.height = h + 'px';
+  const ctx = el.getContext('2d');
+  ctx.scale(devicePixelRatio, devicePixelRatio);
+  return { ctx, w, h };
+}
+function tx(i, w, n) { return L + (i/(n-1)) * (w-L-R); }
+function ty(v, mn, mx, h) { return T + (1-(v-mn)/(mx-mn)) * (h-T-B); }
+
+function grid(ctx, w, h, mn, mx, labels, steps=4) {
+  ctx.strokeStyle = GRD; ctx.lineWidth = .5;
+  ctx.fillStyle = TXT; ctx.font = '7px Inter, sans-serif'; ctx.textAlign = 'right';
+  for (let i=0; i<=steps; i++) {
+    const v = mn + (mx-mn)*(i/steps);
+    const y = ty(v, mn, mx, h);
+    ctx.beginPath(); ctx.moveTo(L,y); ctx.lineTo(w-R,y); ctx.stroke();
+    ctx.fillText(v.toFixed(1), L-3, y+3);
+  }
+  ctx.textAlign='center'; ctx.fillStyle=TXT;
+  labels.forEach((s,i) => ctx.fillText(s.slice(5), tx(i,w,labels.length), h-B+13));
+}
+
+function drawLine(ctx, data, w, h, color, mn, mx, n, fill=false) {
+  const pts = data.map((v,i) => ({ x: tx(i,w,n), y: ty(v,mn,mx,h) }));
+  if (fill) {
+    ctx.beginPath();
+    pts.forEach((p,i) => i===0?ctx.moveTo(p.x,p.y):ctx.lineTo(p.x,p.y));
+    ctx.lineTo(pts[pts.length-1].x, h-B); ctx.lineTo(pts[0].x, h-B); ctx.closePath();
+    const g = ctx.createLinearGradient(0,0,0,h);
+    g.addColorStop(0, color+'28'); g.addColorStop(1,'transparent');
+    ctx.fillStyle = g; ctx.fill();
+  }
+  ctx.beginPath(); ctx.strokeStyle=color; ctx.lineWidth=1.8;
+  ctx.lineJoin='round'; ctx.lineCap='round';
+  pts.forEach((p,i) => i===0?ctx.moveTo(p.x,p.y):ctx.lineTo(p.x,p.y));
+  ctx.stroke();
+  pts.forEach((p,i) => {
+    const last = i===pts.length-1;
+    ctx.beginPath(); ctx.arc(p.x,p.y,last?4:2.5,0,Math.PI*2);
+    ctx.fillStyle = last?color:'#0c1210'; ctx.strokeStyle=color; ctx.lineWidth=1.5;
+    ctx.fill(); ctx.stroke();
+    if (last) {
+      ctx.fillStyle=color; ctx.font='bold 8.5px "Syne Mono",monospace';
+      ctx.textAlign='left'; ctx.fillText(data[i].toFixed(1), p.x+6, p.y+3);
+    }
+  });
+}
+
+function legend(ctx, items, y=10) {
+  let x = L;
+  items.forEach(it => {
+    ctx.beginPath(); ctx.arc(x,y,3,0,Math.PI*2); ctx.fillStyle=it.c; ctx.fill();
+    ctx.fillStyle='rgba(255,255,255,.5)'; ctx.font='7.5px Inter,sans-serif';
+    ctx.textAlign='left'; ctx.fillText(it.l, x+6, y+3);
+    x += it.l.length*4.8 + 16;
+  });
+}
+
+function drawAllCharts() {
+  ['raul','montse'].forEach(who => drawPersonCharts(who, DATA[who]));
+}
+
+function drawPersonCharts(who, person) {
+  const hist = person.historial;
+  const fechas = hist.map(h => h.fecha);
+  const n = hist.length;
+  const colorMain = who === 'raul' ? '#4ade9b' : '#f472b6';
+  const OR = '#ff8c42', PU = '#c084fc';
+
+  // Peso
+  let s = setupCanvas(who + '_cPeso');
+  if (s) {
+    const { ctx, w, h } = s;
+    const vals = hist.map(d => d.peso_kg);
+    const mn = Math.min(...vals)-1, mx = Math.max(...vals)+1;
+    grid(ctx, w, h, mn, mx, fechas, 4);
+    if (person.metas && person.metas.peso_kg) {
+      const my = ty(person.metas.peso_kg, mn, mx, h);
+      ctx.setLineDash([3,4]); ctx.strokeStyle = colorMain+'40'; ctx.lineWidth=.8;
+      ctx.beginPath(); ctx.moveTo(L,my); ctx.lineTo(w-R,my); ctx.stroke(); ctx.setLineDash([]);
+      ctx.fillStyle = colorMain+'70'; ctx.font='7px Inter'; ctx.textAlign='right';
+      ctx.fillText('meta '+person.metas.peso_kg, w-R-2, my-2);
+    }
+    drawLine(ctx, vals, w, h, colorMain, mn, mx, n, true);
+  }
+
+  // Grasa vs musculo
+  s = setupCanvas(who + '_cComp');
+  if (s) {
+    const { ctx, w, h } = s;
+    const grasa = hist.map(d => d.grasa_pct), musculo = hist.map(d => d.musculo_pct);
+    const all = [...grasa, ...musculo];
+    const mn = Math.min(...all)-1, mx = Math.max(...all)+1;
+    grid(ctx, w, h, mn, mx, fechas, 4);
+    legend(ctx, [{l:'% Grasa',c:OR},{l:'% Músculo',c: who==='raul'?colorMain:PU}]);
+    drawLine(ctx, grasa, w, h, OR, mn, mx, n, true);
+    drawLine(ctx, musculo, w, h, who==='raul'?colorMain:PU, mn, mx, n, false);
+  }
+
+  // Medidas
+  s = setupCanvas(who + '_cMedidas');
+  if (s) {
+    const { ctx, w, h } = s;
+    const abdomen = hist.map(d => d.abdomen_cm), cintura = hist.map(d => d.cintura_cm), cadera = hist.map(d => d.cadera_cm);
+    const all = [...abdomen, ...cintura, ...cadera];
+    const mn = Math.min(...all)-1, mx = Math.max(...all)+1;
+    grid(ctx, w, h, mn, mx, fechas, 4);
+    legend(ctx, [{l:'Abdomen',c:colorMain},{l:'Cintura',c:colorMain+'a0'},{l:'Cadera',c:colorMain+'60'}]);
+    drawLine(ctx, cadera, w, h, colorMain+'60', mn, mx, n);
+    drawLine(ctx, cintura, w, h, colorMain+'a0', mn, mx, n);
+    drawLine(ctx, abdomen, w, h, colorMain, mn, mx, n, true);
+  }
+
+  if (who === 'raul') {
+    s = setupCanvas('raul_cVisc');
+    if (s) {
+      const { ctx, w, h } = s;
+      const visc = hist.map(d => d.grasa_visceral);
+      const mn = Math.min(...visc)-1, mx = Math.max(...visc)+1;
+      grid(ctx, w, h, mn, mx, fechas, 3);
+      const zy = ty(9, mn, mx, h);
+      ctx.fillStyle = 'rgba(239,68,68,.05)';
+      ctx.fillRect(L, zy, w-L-R, (h-B)-zy);
+      ctx.fillStyle = 'rgba(239,68,68,.3)'; ctx.font='7px Inter'; ctx.textAlign='right';
+      ctx.fillText('riesgo ≥9', w-R-2, zy+10);
+      drawLine(ctx, visc, w, h, '#f59e0b', mn, mx, n, true);
+    }
+  } else {
+    s = setupCanvas('montse_cOtras');
+    if (s) {
+      const { ctx, w, h } = s;
+      const busto = hist.map(d => d.busto_cm), muslo = hist.map(d => d.muslo_cm), brazo = hist.map(d => d.brazo_cm);
+      const all = [...busto, ...muslo, ...brazo];
+      const mn = Math.min(...all)-1, mx = Math.max(...all)+1;
+      grid(ctx, w, h, mn, mx, fechas, 4);
+      legend(ctx, [{l:'Busto',c:colorMain},{l:'Muslo',c:PU},{l:'Brazo',c:colorMain+'70'}]);
+      drawLine(ctx, busto, w, h, colorMain, mn, mx, n, true);
+      drawLine(ctx, muslo, w, h, PU, mn, mx, n);
+      drawLine(ctx, brazo, w, h, colorMain+'70', mn, mx, n);
+    }
+  }
+}
+
+window.addEventListener('resize', () => { if (DATA) drawAllCharts(); });
+
+loadData();
+</script>
+</body>
+</html>
