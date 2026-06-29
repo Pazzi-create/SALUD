@@ -420,8 +420,8 @@ function attachNavListeners() {
 }
 
 /* ── CANVAS CHARTS (genéricos, alimentados por DATA) ── */
-const GRD = 'rgba(255,255,255,.05)', TXT = 'rgba(255,255,255,.3)';
-const L=32, R=26, T=14, B=22;
+const GRD = 'rgba(255,255,255,.06)', TXT = 'rgba(255,255,255,.4)';
+const L=38, R=14, T=16, B=28;
 
 function setupCanvas(id) {
   const el = document.getElementById(id);
@@ -439,15 +439,16 @@ function ty(v, mn, mx, h) { return T + (1-(v-mn)/(mx-mn)) * (h-T-B); }
 
 function grid(ctx, w, h, mn, mx, labels, steps=4) {
   ctx.strokeStyle = GRD; ctx.lineWidth = .5;
-  ctx.fillStyle = TXT; ctx.font = '7px Inter, sans-serif'; ctx.textAlign = 'right';
+  ctx.fillStyle = TXT; ctx.font = '9px Inter, sans-serif'; ctx.textAlign = 'right';
   for (let i=0; i<=steps; i++) {
     const v = mn + (mx-mn)*(i/steps);
     const y = ty(v, mn, mx, h);
     ctx.beginPath(); ctx.moveTo(L,y); ctx.lineTo(w-R,y); ctx.stroke();
-    ctx.fillText(v.toFixed(1), L-3, y+3);
+    ctx.fillText(v.toFixed(1), L-6, y+3);
   }
   ctx.textAlign='center'; ctx.fillStyle=TXT;
-  labels.forEach((s,i) => ctx.fillText(s.slice(5), tx(i,w,labels.length), h-B+13));
+  ctx.font = '8px Inter, sans-serif';
+  labels.forEach((s,i) => ctx.fillText(s.slice(5), tx(i,w,labels.length), h-6));
 }
 
 function drawLine(ctx, data, w, h, color, mn, mx, n, fill=false) {
