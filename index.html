@@ -116,7 +116,7 @@
 
   .chart-box { background:var(--surface2); border-radius:var(--radius-sm); padding:14px 14px 8px; margin-bottom:16px; }
   .chart-title { font-size:11px; font-weight:600; letter-spacing:1px; text-transform:uppercase; color:var(--text-dim); margin-bottom:8px; }
-  canvas.dash-canvas { display:block; width:100% !important; }
+  canvas.dash-canvas { display:block; max-width:100%; }
 
   .loading { text-align:center; padding:60px 20px; color:var(--text-dim); font-size:13px; }
   .error-box { background:rgba(239,68,68,0.08); border:1px solid rgba(239,68,68,0.25); border-radius:var(--radius); padding:20px; color:#fca5a5; font-size:13px; line-height:1.6; }
@@ -375,8 +375,8 @@ function renderPersonDashboard(who, person, last, first) {
   const color = who === 'raul' ? 'raul' : 'montse';
   const metaPeso = person.metas.peso_kg;
   const extraCharts = who === 'raul'
-    ? `<div class="chart-box"><div class="chart-title">Grasa Visceral</div><canvas class="dash-canvas" id="${who}_cVisc" height="130"></canvas></div>`
-    : `<div class="chart-box"><div class="chart-title">Busto · Muslo · Brazo · cm</div><canvas class="dash-canvas" id="${who}_cOtras" height="160"></canvas></div>`;
+    ? `<div class="chart-box"><div class="chart-title">Grasa Visceral</div><canvas class="dash-canvas" id="${who}_cVisc" data-ratio="0.34"></canvas></div>`
+    : `<div class="chart-box"><div class="chart-title">Busto · Muslo · Brazo · cm</div><canvas class="dash-canvas" id="${who}_cOtras" data-ratio="0.42"></canvas></div>`;
 
   return `
     <div class="dboard-hero ${color}">
@@ -391,9 +391,9 @@ function renderPersonDashboard(who, person, last, first) {
         <div class="dboard-mini"><div class="dboard-mini-lbl">Abdomen</div><div class="dboard-mini-val">${fmt(last.abdomen_cm)} cm</div><div class="dboard-mini-sub">inicio ${fmt(first.abdomen_cm)} cm</div></div>
       </div>
     </div>
-    <div class="chart-box"><div class="chart-title">Evolución del Peso · kg</div><canvas class="dash-canvas" id="${who}_cPeso" height="170"></canvas></div>
-    <div class="chart-box"><div class="chart-title">% Grasa vs % Músculo</div><canvas class="dash-canvas" id="${who}_cComp" height="160"></canvas></div>
-    <div class="chart-box"><div class="chart-title">Medidas Corporales · cm</div><canvas class="dash-canvas" id="${who}_cMedidas" height="160"></canvas></div>
+    <div class="chart-box"><div class="chart-title">Evolución del Peso · kg</div><canvas class="dash-canvas" id="${who}_cPeso" data-ratio="0.46"></canvas></div>
+    <div class="chart-box"><div class="chart-title">% Grasa vs % Músculo</div><canvas class="dash-canvas" id="${who}_cComp" data-ratio="0.42"></canvas></div>
+    <div class="chart-box"><div class="chart-title">Medidas Corporales · cm</div><canvas class="dash-canvas" id="${who}_cMedidas" data-ratio="0.42"></canvas></div>
     ${extraCharts}
   `;
 }
@@ -427,7 +427,11 @@ function setupCanvas(id) {
   const el = document.getElementById(id);
   if (!el) return null;
   const w = el.parentElement.clientWidth - 24;
-  const h = parseInt(el.getAttribute('height')) || 150;
+  // Altura proporcional al ancho (aspect ratio), con piso y techo razonables.
+  // Evita que en pantallas angostas (móvil) la gráfica se vea desproporcionadamente alta.
+  const targetRatio = parseFloat(el.dataset.ratio) || 0.42; // alto = 42% del ancho por defecto
+  let h = Math.round(w * targetRatio);
+  h = Math.max(110, Math.min(h, 210)); // nunca menos de 110px ni más de 210px
   el.width = w * devicePixelRatio; el.height = h * devicePixelRatio;
   el.style.width = w + 'px'; el.style.height = h + 'px';
   const ctx = el.getContext('2d');
