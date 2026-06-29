@@ -1,0 +1,59 @@
+{
+  "ultima_actualizacion": "2026-06-29",
+  "raul": {
+    "info": { "edad": 39, "estatura_m": 1.70, "inicio_glp1": "2026-04-25" },
+    "metas": { "peso_kg": 72, "grasa_visceral_max": 9 },
+    "historial": [
+      { "fecha": "2026-04-18", "peso_kg": 79.8, "grasa_pct": 27.3, "musculo_pct": 34.8, "grasa_visceral": 11, "brazo_cm": 34.0, "pecho_cm": 103.0, "cintura_cm": 93.0, "abdomen_cm": 97.5, "cadera_cm": 97.0, "muslo_cm": 57.0, "glp1": "no", "nota": "Medida inicial baseline" },
+      { "fecha": "2026-04-25", "peso_kg": 77.9, "grasa_pct": 27.6, "musculo_pct": 34.5, "grasa_visceral": 11, "brazo_cm": 32.0, "pecho_cm": 100.0, "cintura_cm": 92.0, "abdomen_cm": 95.0, "cadera_cm": 93.5, "muslo_cm": 54.0, "glp1": "1a dosis", "nota": "Sem1 sin GLP1 activo todavia" },
+      { "fecha": "2026-05-02", "peso_kg": 76.2, "grasa_pct": 27.3, "musculo_pct": 34.5, "grasa_visceral": 10, "brazo_cm": 31.5, "pecho_cm": 105.0, "cintura_cm": 90.5, "abdomen_cm": 93.5, "cadera_cm": 92.5, "muslo_cm": 54.5, "glp1": "2a dosis", "nota": "Pecho 105cm probable error de medicion" },
+      { "fecha": "2026-05-09", "peso_kg": 73.8, "grasa_pct": 26.0, "musculo_pct": 35.1, "grasa_visceral": 9, "brazo_cm": 31.5, "pecho_cm": 97.0, "cintura_cm": 88.5, "abdomen_cm": 92.5, "cadera_cm": 91.5, "muslo_cm": 52.8, "glp1": "3a dosis", "nota": "" },
+      { "fecha": "2026-05-15", "peso_kg": 73.1, "grasa_pct": 24.1, "musculo_pct": 36.4, "grasa_visceral": 9, "brazo_cm": 31.5, "pecho_cm": 97.0, "cintura_cm": 87.5, "abdomen_cm": 91.5, "cadera_cm": 90.0, "muslo_cm": 53.0, "glp1": "3a dosis", "nota": "" },
+      { "fecha": "2026-05-23", "peso_kg": 71.1, "grasa_pct": 23.3, "musculo_pct": 36.7, "grasa_visceral": 8, "brazo_cm": 32.0, "pecho_cm": 97.5, "cintura_cm": 87.0, "abdomen_cm": 91.0, "cadera_cm": 88.5, "muslo_cm": 52.3, "glp1": "4a dosis", "nota": "Ultima dosis pre-viaje" },
+      { "fecha": "2026-05-30", "peso_kg": 69.1, "grasa_pct": 23.0, "musculo_pct": 36.6, "grasa_visceral": 8, "brazo_cm": 30.4, "pecho_cm": 96.0, "cintura_cm": 86.0, "abdomen_cm": 88.0, "cadera_cm": 87.5, "muslo_cm": 51.4, "glp1": "no", "nota": "Dosis del 29may NO se aplico - inicio del viaje" },
+      { "fecha": "2026-06-29", "peso_kg": 73.5, "grasa_pct": 23.2, "musculo_pct": 37.0, "grasa_visceral": 9, "brazo_cm": 31.0, "pecho_cm": 97.5, "cintura_cm": 88.5, "abdomen_cm": 91.0, "cadera_cm": 90.5, "muslo_cm": 53.5, "glp1": "retoma", "nota": "Retoma 28jun noche tras 5 semanas de pausa - medicion oficial post-viaje en ayunas" }
+    ],
+    "labs": {
+      "fecha": "2026-04-23",
+      "homa_ir": { "glucosa": 83, "insulina": 13.2, "valor": 2.71, "ref": "<2.7", "estado": "borderline" },
+      "lipidos": {
+        "colesterol_total": 224, "ldl": 167, "sd_ldl": 3.83, "hdl": 40,
+        "trigliceridos": 153, "indice_aterogenico": 5.6, "ldl_hdl": 4.2
+      },
+      "higado_rinon": { "ggt": 106, "ast": 18, "alt": 38, "acido_urico": 8.0, "creatinina": 1.15, "tfg": 79.7 },
+      "tiroides": { "tsh": 0.92, "t4_libre": 1.6, "t3": 0.9 },
+      "hematico": { "basofilos_pct": 1.4, "leucocitos": 6.98, "hemoglobina": 17.0 },
+      "orina": { "ph": 6, "meta_ph": "6.5-7.0" }
+    }
+  },
+  "montse": {
+    "info": { "edad": 37, "estatura_m": 1.66, "inicio_glp1": "2026-04-17" },
+    "metas": { "peso_kg": 65 },
+    "historial": [
+      { "fecha": "2026-04-18", "peso_kg": 71.5, "grasa_pct": 38.2, "musculo_pct": 26.6, "grasa_visceral": 6, "brazo_cm": 31.7, "busto_cm": 99.0, "cintura_cm": 76.5, "abdomen_cm": 93.0, "cadera_cm": 100.0, "muslo_cm": 59.0, "glp1": "1a dosis (17 abr)", "nota": "Medida inicial baseline" },
+      { "fecha": "2026-04-25", "peso_kg": 69.2, "grasa_pct": 37.3, "musculo_pct": 26.7, "grasa_visceral": 6, "brazo_cm": 31.7, "busto_cm": 96.0, "cintura_cm": 74.5, "abdomen_cm": 91.0, "cadera_cm": 99.0, "muslo_cm": 57.0, "glp1": "2a dosis", "nota": "" },
+      { "fecha": "2026-05-02", "peso_kg": 68.3, "grasa_pct": 37.3, "musculo_pct": 26.5, "grasa_visceral": 6, "brazo_cm": 31.7, "busto_cm": 96.0, "cintura_cm": 73.5, "abdomen_cm": 88.5, "cadera_cm": 98.0, "muslo_cm": 56.5, "glp1": "3a dosis", "nota": "" },
+      { "fecha": "2026-05-09", "peso_kg": 66.6, "grasa_pct": 36.0, "musculo_pct": 27.0, "grasa_visceral": 5, "brazo_cm": 30.5, "busto_cm": 95.5, "cintura_cm": 72.5, "abdomen_cm": 87.0, "cadera_cm": 97.0, "muslo_cm": 56.0, "glp1": "4a dosis", "nota": "" },
+      { "fecha": "2026-05-15", "peso_kg": 66.1, "grasa_pct": 34.6, "musculo_pct": 27.8, "grasa_visceral": 5, "brazo_cm": 30.7, "busto_cm": 95.0, "cintura_cm": 71.5, "abdomen_cm": 87.0, "cadera_cm": 96.5, "muslo_cm": 56.0, "glp1": "4a dosis", "nota": "" },
+      { "fecha": "2026-05-23", "peso_kg": 65.2, "grasa_pct": 34.3, "musculo_pct": 27.8, "grasa_visceral": 5, "brazo_cm": 30.9, "busto_cm": 94.5, "cintura_cm": 71.5, "abdomen_cm": 86.5, "cadera_cm": 95.5, "muslo_cm": 55.5, "glp1": "5a dosis", "nota": "Ultima dosis pre-viaje" },
+      { "fecha": "2026-05-30", "peso_kg": 63.8, "grasa_pct": 33.2, "musculo_pct": 28.3, "grasa_visceral": 5, "brazo_cm": 29.5, "busto_cm": 93.5, "cintura_cm": 69.0, "abdomen_cm": 83.0, "cadera_cm": 93.5, "muslo_cm": 52.5, "glp1": "6a dosis", "nota": "Dosis del 29may NO se aplico - inicio del viaje" },
+      { "fecha": "2026-06-29", "peso_kg": 67.1, "grasa_pct": 32.6, "musculo_pct": 29.4, "grasa_visceral": 5, "brazo_cm": 31.5, "busto_cm": 96.5, "cintura_cm": 71.5, "abdomen_cm": 85.0, "cadera_cm": 95.0, "muslo_cm": 55.0, "glp1": "retoma", "nota": "Retoma 28jun noche tras 5 semanas de pausa - medicion oficial post-viaje en ayunas" }
+    ],
+    "labs": {
+      "fecha": "disponibles (sin fecha exacta documentada)",
+      "tsh": { "valor": 8.69, "ref": "0.19-4.92", "estado": "hipotiroidismo subclinico" },
+      "glucosa": { "valor": 109, "ref": "55-99", "estado": "prediabetes" },
+      "homa_ir": { "valor": 3.53, "ref": "<2.7", "estado": "resistencia a insulina establecida" }
+    }
+  },
+  "linea_tiempo_glp1": [
+    { "fecha": "2026-05-23", "evento": "Ultima dosis pre-viaje (ambos)" },
+    { "fecha": "2026-05-29", "evento": "Dosis programada NO aplicada - inicio del viaje (Cancun + NY Mundial)" },
+    { "fecha": "2026-06-28", "evento": "Retoma GLP1 en la noche - misma dosis, confirmada por la doctora tras 5 semanas de pausa" }
+  ],
+  "pendientes": [
+    "Reprogramar analisis de seguimiento (TSH Montse, sd LDL y basofilos Raul, HOMA-IR ambos)",
+    "Vigilar grasa visceral de Raul - en 9, al limite de zona normal",
+    "Retomar protocolo completo de suplementos tras la pausa del viaje"
+  ]
+}
